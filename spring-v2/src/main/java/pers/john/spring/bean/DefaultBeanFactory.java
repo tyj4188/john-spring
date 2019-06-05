@@ -79,6 +79,9 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
             throw new Exception(String.format("循环依赖 BeanName [%s] ", beanName));
         }
 
+        // 构建中的 Bean
+        buildBeanSet.add(beanName);
+
         Class<?> type = beanDefinition.getBeanClass();
         if(type != null) {
             if(StringUtils.isEmpty(beanDefinition.getFactoryMethodName())) {
@@ -96,7 +99,11 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
         // DI 功能
         setPropertyDIValue(beanDefinition, instance);
 
+        // 调用托管实例的初始化方法
         doInit(instance, beanDefinition);
+
+        // 初始化完成后删除构建中状态
+        buildBeanSet.remove(beanName);
 
         // 单例的放入缓存中
         if(beanDefinition.isSingleton()) {

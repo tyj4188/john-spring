@@ -1,11 +1,15 @@
 package pers.john.spring.test.v2;
 
+import com.sun.istack.internal.NotNull;
 import org.junit.Test;
 import pers.john.spring.bean.DefaultBeanFactory;
 import pers.john.spring.bean.GenericBeanDefinition;
+import pers.john.spring.bean.PreBuildBeanFactory;
 import pers.john.spring.bean.di.BeanReference;
 import pers.john.spring.bean.di.PropertyValue;
 import pers.john.spring.samples.Boy;
+import pers.john.spring.samples.CBean;
+import pers.john.spring.samples.DBean;
 import pers.john.spring.samples.Girl;
 
 import java.util.*;
@@ -54,8 +58,24 @@ public class DITest {
     }
 
     @Test
-    public void testCircleDI() {
+    public void testCircleDI() throws Exception {
+        PreBuildBeanFactory preFactory = new PreBuildBeanFactory();
+        GenericBeanDefinition cBeanDefinition = new GenericBeanDefinition();
+        cBeanDefinition.setBeanClass(CBean.class);
+        List<Object> cBeanArgs = Arrays.asList(new BeanReference("dBean"));
+        cBeanDefinition.setConstructorArgumentValues(cBeanArgs);
+        preFactory.registerBeanDefinition("cBean", cBeanDefinition);
 
+        GenericBeanDefinition dBeanDefinition = new GenericBeanDefinition();
+        dBeanDefinition.setBeanClass(DBean.class);
+        List<Object> dBeanArgs = Arrays.asList(new BeanReference("cBean"));
+        dBeanDefinition.setConstructorArgumentValues(dBeanArgs);
+        preFactory.registerBeanDefinition("dBean", dBeanDefinition);
+
+        preFactory.preInstantiateSingleton();
+
+        CBean cBean = (CBean) preFactory.getBean("cBean");
+        cBean.doSomething();
     }
 
     @Test
@@ -69,5 +89,12 @@ public class DITest {
         ds.accept(5);
         ds.accept(5);
         System.out.println(ds.getAverage());
+
+        notNull(null);
     }
+
+    public void notNull(@NotNull String arg) {
+        System.out.println(arg);
+    }
+
 }
