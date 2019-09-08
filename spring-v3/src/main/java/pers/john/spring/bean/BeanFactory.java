@@ -1,6 +1,8 @@
 
 package pers.john.spring.bean;
 
+import pers.john.spring.aop.BeanPostProcessor;
+
 /**
  * Bean 工厂
  */
@@ -11,4 +13,6 @@ public interface BeanFactory {
      * @return
      */
     Object getBean(String beanName) throws Exception;
+
+    void registerBeanPostProcessor(BeanPostProcessor processor);
 }

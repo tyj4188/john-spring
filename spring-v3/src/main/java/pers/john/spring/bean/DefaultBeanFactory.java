@@ -1,5 +1,6 @@
 package pers.john.spring.bean;
 
+import pers.john.spring.aop.BeanPostProcessor;
 import pers.john.spring.bean.di.BeanReference;
 import pers.john.spring.bean.di.PropertyValue;
 import pers.john.spring.utils.ClassUtils;
@@ -53,6 +54,11 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
     @Override
     public Object getBean(String beanName) throws Exception {
         return doGetBean(beanName);
+    }
+
+    @Override
+    public void registerBeanPostProcessor(BeanPostProcessor processor) {
+
     }
 
     protected Object doGetBean(String beanName) throws Exception {
