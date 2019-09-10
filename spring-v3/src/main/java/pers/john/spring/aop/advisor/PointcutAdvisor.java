@@ -7,7 +7,9 @@
  * 2019/6/19 - Administrator - 创建。
  */
 
-package pers.john.spring.aop;
+package pers.john.spring.aop.advisor;
+
+import pers.john.spring.aop.pointcut.Pointcut;
 
 /**
  * 基于切入点的通知者

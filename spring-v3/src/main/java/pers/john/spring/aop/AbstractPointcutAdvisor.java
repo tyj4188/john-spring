@@ -9,6 +9,9 @@
 
 package pers.john.spring.aop;
 
+import pers.john.spring.aop.advisor.PointcutAdvisor;
+import pers.john.spring.aop.pointcut.Pointcut;
+
 /**
  * 基于节点的抽象通知者，定义一些公共属性
  * @author Administrator

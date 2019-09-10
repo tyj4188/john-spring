@@ -1,4 +1,4 @@
-package pers.john.spring.aop;
+package pers.john.spring.aop.pointcut;
 
 import java.lang.reflect.Method;
 

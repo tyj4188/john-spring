@@ -7,7 +7,7 @@
  * 2019/6/19 - Administrator - 创建。
  */
 
-package pers.john.spring.aop;
+package pers.john.spring.aop.advisor;
 
 /**
  * 通知者，给用户方便使用，整合了 Advice, Pointcut

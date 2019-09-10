@@ -1,4 +1,4 @@
-package pers.john.spring.aop;
+package pers.john.spring.aop.pointcut;
 
 import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.PointcutParser;
