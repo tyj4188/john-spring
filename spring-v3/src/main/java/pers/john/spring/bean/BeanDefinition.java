@@ -49,7 +49,7 @@ public interface BeanDefinition {
      * 构造器参数
      * @return
      */
-    List<?> getConstructorArgumentValues();
+    Object[] getConstructorArgumentValues();
 
     /**
      * 构造器缓存

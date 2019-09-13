@@ -242,7 +242,7 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
     }
 
     private Object[] getConstructorArgumentValues(BeanDefinition beanDefinition) throws Exception {
-        return getArgumentRealValues(beanDefinition.getConstructorArgumentValues());
+        return getArgumentRealValues(Arrays.asList(beanDefinition.getConstructorArgumentValues()));
     }
 
     private Object[] getArgumentRealValues(List<?> args) throws Exception {
