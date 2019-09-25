@@ -10,9 +10,12 @@
 package pers.john.spring.aop;
 
 import pers.john.spring.aop.advisor.Advisor;
+import pers.john.spring.aop.advisor.PointcutAdvisor;
 import pers.john.spring.bean.BeanFactory;
+import pers.john.spring.utils.CollectionUtils;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,14 +37,42 @@ public class AopProxyUtils {
      * @return 方法执行返回的结果
      */
     public static Object applyAdvices(Object target, Method method, Object[] args
-        , List<Advisor> matchAdvices, Object proxy, BeanFactory beanFactory) {
-        // TODO 判断哪些通知可以进行增强调用
+        , List<Advisor> matchAdvices, Object proxy, BeanFactory beanFactory) throws Exception {
+        // 判断哪些通知可以进行增强调用
+        List<Object> advices = getShouldApplyAdvices(target.getClass()
+            , method, matchAdvices, beanFactory);
+        // 判断是否需要增强调用
+        if(CollectionUtils.isEmpty(advices)) {
+            // 不需要增强直接执行方法并返回
+            return method.invoke(target, args);
+        }
+        // 需要增强，递归调用链进行增强
+        AopAdviceChainInvocation chain = new AopAdviceChainInvocation(target, method, args, proxy, advices);
+        return chain.invoke();
+    }
 
-        // TODO 判断是否需要增强调用
+    /**
+     * 获取当前需要增强的切面通知
+     * @param beanClass 需要增强的对象
+     * @param method 增强的方法
+     * @param matchAdvices 所有切面
+     * @param beanFactory 通过工厂获取通知对象
+     * @return
+     * @throws Exception
+     */
+    private static List<Object> getShouldApplyAdvices(Class<?> beanClass
+        , Method method, List<Advisor> matchAdvices, BeanFactory beanFactory) throws Exception {
 
-        // TODO 不需要增强直接执行方法并返回
-
-        // TODO 需要增强，递归调用链进行增强
+        if(CollectionUtils.isNotEmpty(matchAdvices)) {
+            List<Object> arr = new ArrayList<>(matchAdvices.size());
+            for(Advisor advisor : matchAdvices) {
+                if(advisor instanceof PointcutAdvisor &&
+                    (((PointcutAdvisor) advisor).getPointcut().matchMethod(method, beanClass))) {
+                    arr.add(beanFactory.getBean(advisor.getAdviceBeanName()));
+                }
+            }
+            return arr;
+        }
 
         return null;
     }
