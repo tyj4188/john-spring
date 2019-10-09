@@ -1,6 +1,5 @@
 package pers.john.spring.bean;
 
-import pers.john.spring.aop.BeanPostProcessor;
 import pers.john.spring.bean.di.BeanReference;
 import pers.john.spring.bean.di.PropertyValue;
 import pers.john.spring.utils.ClassUtils;
@@ -190,6 +189,7 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
         Constructor<?> constructor = null;
         Class beanClass = beanDefinition.getBeanClass();
 
+        beanDefinition.setConstructorArgumentRealValues(args);
         if(null == args || args.length == 0) {
             // 返回无参构造器
             return beanClass.getConstructor(null);

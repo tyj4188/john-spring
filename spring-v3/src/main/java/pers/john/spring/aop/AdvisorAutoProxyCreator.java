@@ -2,6 +2,7 @@ package pers.john.spring.aop;
 
 import pers.john.spring.aop.advisor.Advisor;
 import pers.john.spring.aop.advisor.AdvisorRegistry;
+import pers.john.spring.bean.BeanPostProcessor;
 
 import java.util.ArrayList;
 import java.util.List;

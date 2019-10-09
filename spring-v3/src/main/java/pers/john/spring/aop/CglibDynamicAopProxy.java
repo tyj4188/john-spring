@@ -64,7 +64,7 @@ public class CglibDynamicAopProxy implements AopProxy, MethodInterceptor {
         } else {
             BeanDefinition definition = ((DefaultBeanFactory)beanFactory).getBeanDefinition(this.beanName);
             return enhancer.create(definition.getConstructor().getParameterTypes()
-                , definition.getConstructorArgumentValues());
+                , definition.getConstructorArgumentRealValues());
         }
     }
 }

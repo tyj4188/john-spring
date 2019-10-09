@@ -49,7 +49,15 @@ public interface BeanDefinition {
      * 构造器参数
      * @return
      */
-    Object[] getConstructorArgumentValues();
+    List<?> getConstructorArgumentValues();
+
+    /**
+     * 获取构造参数的实际数据
+     * @return
+     */
+    Object[] getConstructorArgumentRealValues();
+
+    void setConstructorArgumentRealValues(Object[] constructorArgumentRealValues);
 
     /**
      * 构造器缓存

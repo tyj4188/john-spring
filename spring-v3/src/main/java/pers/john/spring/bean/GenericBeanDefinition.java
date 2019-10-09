@@ -28,6 +28,8 @@ public class GenericBeanDefinition implements BeanDefinition {
     // 构造器参数值
     private List<?> constructorArgumentValues;
 
+    private Object[] constructorArgumentRealValues;
+
     // DI 注入的成员变量
     private List<PropertyValue> propertyValues;
 
@@ -78,6 +80,16 @@ public class GenericBeanDefinition implements BeanDefinition {
     @Override
     public List<?> getConstructorArgumentValues() {
         return constructorArgumentValues;
+    }
+
+    @Override
+    public void setConstructorArgumentRealValues(Object[] constructorArgumentRealValues) {
+        this.constructorArgumentRealValues = constructorArgumentRealValues;
+    }
+
+    @Override
+    public Object[] getConstructorArgumentRealValues() {
+        return constructorArgumentRealValues;
     }
 
     @Override

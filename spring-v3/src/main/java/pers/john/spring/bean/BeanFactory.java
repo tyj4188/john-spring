@@ -1,8 +1,6 @@
 
 package pers.john.spring.bean;
 
-import pers.john.spring.aop.BeanPostProcessor;
-
 /**
  * Bean 工厂
  */
