@@ -1,9 +1,9 @@
 package pers.john.spring.bean;
 
+import org.springframework.util.CollectionUtils;
 import pers.john.spring.bean.di.BeanReference;
 import pers.john.spring.bean.di.PropertyValue;
 import pers.john.spring.utils.ClassUtils;
-import pers.john.spring.utils.CollectionUtils;
 import pers.john.spring.utils.StringUtils;
 
 import java.io.Closeable;
@@ -22,6 +22,9 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
     private static Map<String, Object> BEAN_MAP = new ConcurrentHashMap(32);
 
     private ThreadLocal<Set<String>> buildingBeans = new ThreadLocal<>();
+
+    // 使用线程安全的集合
+    private List<BeanPostProcessor> processorList = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
@@ -57,7 +60,10 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
 
     @Override
     public void registerBeanPostProcessor(BeanPostProcessor processor) {
-
+        processorList.add(processor);
+        if(processor instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) processor).setBeanFactory(this);
+        }
     }
 
     protected Object doGetBean(String beanName) throws Exception {
@@ -104,8 +110,14 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
         // DI 功能
         setPropertyDIValue(beanDefinition, instance);
 
+        // 调用初始化前的增强处理
+        instance = applyPostProcessorBeforeInitialization(instance, beanName);
+
         // 调用托管实例的初始化方法
         doInit(instance, beanDefinition);
+
+        // 调用初始化后的增强处理
+        instance = applyPostProcessorAfterInitialization(instance, beanName);
 
         // 初始化完成后删除构建中状态
         buildBeanSet.remove(beanName);
@@ -116,6 +128,32 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
         }
 
         return instance;
+    }
+
+    /**
+     * 初始化前的增强处理
+     * @param bean
+     * @param beanName
+     * @return
+     */
+    private Object applyPostProcessorBeforeInitialization(Object bean, String beanName) {
+        for(BeanPostProcessor temp : processorList) {
+            bean = temp.postProcessorBeforeInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    /**
+     * 初始化后的增强处理
+     * @param bean
+     * @param beanName
+     * @return
+     */
+    private Object applyPostProcessorAfterInitialization(Object bean, String beanName) {
+        for(BeanPostProcessor temp : processorList) {
+            bean = temp.postProcessorAfterInitialization(bean, beanName);
+        }
+        return bean;
     }
 
     // 构造器
@@ -242,7 +280,10 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry, 
     }
 
     private Object[] getConstructorArgumentValues(BeanDefinition beanDefinition) throws Exception {
-        return getArgumentRealValues(Arrays.asList(beanDefinition.getConstructorArgumentValues()));
+        if(beanDefinition.getConstructorArgumentValues() != null) {
+            return getArgumentRealValues(Arrays.asList(beanDefinition.getConstructorArgumentValues()));
+        }
+        return null;
     }
 
     private Object[] getArgumentRealValues(List<?> args) throws Exception {

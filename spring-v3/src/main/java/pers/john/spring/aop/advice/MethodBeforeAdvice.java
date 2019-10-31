@@ -10,5 +10,5 @@ public interface MethodBeforeAdvice extends Advice {
      * @param args
      * @param target
      */
-    public void befor(Method method, Object[] args, Object target);
+    public void before(Method method, Object[] args, Object target);
 }

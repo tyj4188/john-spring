@@ -35,10 +35,19 @@ public class CglibDynamicAopProxy implements AopProxy, MethodInterceptor {
     private List<Advisor> matchAdvisors;
     private BeanFactory beanFactory;
 
+    public CglibDynamicAopProxy(String beanName, Object target,
+        List<Advisor> matchAdvisors, BeanFactory beanFactory) {
+        super();
+        this.beanName = beanName;
+        this.target = target;
+        this.matchAdvisors = matchAdvisors;
+        this.beanFactory = beanFactory;
+    }
+
     @Override
-    public Object intercept(Object target, Method method, Object[] args, MethodProxy methodProxy)
+    public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
         throws Throwable {
-        return AopProxyUtils.applyAdvices(target, method, args, matchAdvisors, methodProxy, beanFactory);
+        return AopProxyUtils.applyAdvices(target, method, args, matchAdvisors, proxy, beanFactory);
     }
 
     @Override

@@ -13,7 +13,6 @@ import pers.john.spring.aop.advice.MethodAfterAdvice;
 import pers.john.spring.aop.advice.MethodAroundAdvice;
 import pers.john.spring.aop.advice.MethodBeforeAdvice;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class AopAdviceChainInvocation {
 
     static {
         try {
-            INVOKE_METHOD = AopAdviceChainInvocation.class.getMethod("invoke");
+            INVOKE_METHOD = AopAdviceChainInvocation.class.getMethod("invoke", null);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -54,18 +53,18 @@ public class AopAdviceChainInvocation {
     }
 
     private int index = 0;
-    public Object invoke() throws InvocationTargetException, IllegalAccessException {
+    public Object invoke() throws Throwable {
         // 实现链式调用
         if(index < advices.size()) {
             // 获取通知
             Object advice = advices.get(index ++);
             // 前置增强
             if(advice instanceof MethodBeforeAdvice) {
-                ((MethodBeforeAdvice) advice).befor(method, args, target);
+                ((MethodBeforeAdvice) advice).before(method, args, target);
             }
             // 环绕增强, 环绕增强需要使用当前链式调用的类
             else if(advice instanceof MethodAroundAdvice) {
-                ((MethodAroundAdvice) advice).around(INVOKE_METHOD, null, this);
+                return ((MethodAroundAdvice) advice).around(INVOKE_METHOD, null, this);
             }
             // 后置增强，需要先得到结果再执行后置增强
             else if(advice instanceof MethodAfterAdvice) {

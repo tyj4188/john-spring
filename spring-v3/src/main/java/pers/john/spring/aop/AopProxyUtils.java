@@ -9,10 +9,10 @@
 
 package pers.john.spring.aop;
 
+import org.springframework.util.CollectionUtils;
 import pers.john.spring.aop.advisor.Advisor;
 import pers.john.spring.aop.advisor.PointcutAdvisor;
 import pers.john.spring.bean.BeanFactory;
-import pers.john.spring.utils.CollectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class AopProxyUtils {
      * @return 方法执行返回的结果
      */
     public static Object applyAdvices(Object target, Method method, Object[] args
-        , List<Advisor> matchAdvices, Object proxy, BeanFactory beanFactory) throws Exception {
+        , List<Advisor> matchAdvices, Object proxy, BeanFactory beanFactory) throws Throwable {
         // 判断哪些通知可以进行增强调用
         List<Object> advices = getShouldApplyAdvices(target.getClass()
             , method, matchAdvices, beanFactory);
@@ -63,7 +63,7 @@ public class AopProxyUtils {
     private static List<Object> getShouldApplyAdvices(Class<?> beanClass
         , Method method, List<Advisor> matchAdvices, BeanFactory beanFactory) throws Exception {
 
-        if(CollectionUtils.isNotEmpty(matchAdvices)) {
+        if(!CollectionUtils.isEmpty(matchAdvices)) {
             List<Object> arr = new ArrayList<>(matchAdvices.size());
             for(Advisor advisor : matchAdvices) {
                 if(advisor instanceof PointcutAdvisor &&

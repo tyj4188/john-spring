@@ -6,6 +6,11 @@ public class ABean {
         System.out.println(System.currentTimeMillis() + " : " + this);
     }
 
+    public String eating() {
+        System.out.println("ABean.eating is executed");
+        return "eating...";
+    }
+
     public void init() {
         System.out.println("ABean.init 执行了...");
     }

@@ -11,5 +11,5 @@ public interface MethodAroundAdvice extends Advice {
      * @param target
      * @return
      */
-    public Object around(Method method, Object[] args, Object target);
+    public Object around(Method method, Object[] args, Object target) throws Throwable;
 }
