@@ -7,13 +7,12 @@
  * 2019/6/19 - Administrator - 创建。
  */
 
-package pers.john.spring.aop;
+package pers.john.spring.aop.advisor;
 
-import pers.john.spring.aop.advisor.PointcutAdvisor;
 import pers.john.spring.aop.pointcut.Pointcut;
 
 /**
- * 基于节点的抽象通知者，定义一些公共属性
+ * 基于切点的抽象通知者，定义一些公共属性
  * @author Administrator
  * @date 2019/6/19
  */

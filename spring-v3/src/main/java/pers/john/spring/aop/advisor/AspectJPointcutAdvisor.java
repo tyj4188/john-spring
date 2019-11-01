@@ -9,7 +9,6 @@
 
 package pers.john.spring.aop.advisor;
 
-import pers.john.spring.aop.AbstractPointcutAdvisor;
 import pers.john.spring.aop.pointcut.AspectJExpressionPointcut;
 import pers.john.spring.aop.pointcut.Pointcut;
 
