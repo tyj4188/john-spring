@@ -2,6 +2,7 @@
 package pers.john.spring.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -207,6 +208,14 @@ public class StringUtils {
             str = str.replaceAll(ESC_ARRAY[i], ESC_ARRAY_REPLACE[i]);
         }
         return str;
+    }
+
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("11111");
+        list.add("22222");
+        List<String> sub = list.subList(1, 100);
+        System.out.println(sub.get(0));
     }
 
 }

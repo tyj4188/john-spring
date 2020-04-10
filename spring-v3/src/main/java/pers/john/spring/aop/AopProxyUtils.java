@@ -31,14 +31,14 @@ public class AopProxyUtils {
      * @param target 被代理对象
      * @param method 执行的方法
      * @param args 方法参数
-     * @param matchAdvices 需要匹配的通知
+     * @param matchAdvices 对整个对象需要匹配的通知
      * @param proxy 代理对象
      * @param beanFactory bean 工厂
      * @return 方法执行返回的结果
      */
     public static Object applyAdvices(Object target, Method method, Object[] args
         , List<Advisor> matchAdvices, Object proxy, BeanFactory beanFactory) throws Throwable {
-        // 判断哪些通知可以进行增强调用
+        // 判断哪些通知可以进行增强调用, 过滤出对当前方法要增强的通知
         List<Object> advices = getShouldApplyAdvices(target.getClass()
             , method, matchAdvices, beanFactory);
         // 判断是否需要增强调用

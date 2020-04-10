@@ -72,4 +72,18 @@ public class AopTest {
         System.out.println("--------------------------------");
         aBean.eating();
     }
+
+    @Test
+    public void sqlPrint() {
+        String sql = "UPDATE olayc_uc_vip_info_history SET `year` = 2020 WHERE `year` = 0 AND season = 1 AND id BETWEEN %s AND %s;";
+
+        int min = 0, max = 0, step = 100000;
+
+        for(int i = 1968710; i < 3382154;) {
+            min = i + 1;
+            i += step;
+            System.out.println(String.format(sql, min, i));
+        }
+    }
+
 }
